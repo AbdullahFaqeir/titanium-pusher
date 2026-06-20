@@ -45,14 +45,18 @@ public class TitaniumPusherModule extends KrollModule
 	public void initialize(KrollDict args)
 	{
 		String key = args.getString("key");
+		String host = args.getString("host");
+		int port = args.getInt("port");
 		KrollDict proxyOptions = args.getKrollDict("options");
 
         PusherOptions options = new PusherOptions();
+        options.setHost(host);
+        options.setWssPort(port);
+        options.setUseTLS(true);
 
 		if (proxyOptions != null) {
 			String authEndpoint = proxyOptions.getString("authEndpoint");
 			String accessToken = proxyOptions.getString("accessToken");
-			String cluster = proxyOptions.getString("cluster");
 			KrollDict headers = proxyOptions.getKrollDict("headers");
 
 			HashMap<String, String> nativeHeaders = new HashMap<>();
@@ -68,11 +72,6 @@ public class TitaniumPusherModule extends KrollModule
 			HttpChannelAuthorizer authorizer = new HttpChannelAuthorizer(authEndpoint);
 			authorizer.setHeaders(nativeHeaders);
 			options.setChannelAuthorizer(authorizer);
-		}
-		if(cluster=="") {
-			options.setCluster("eu");
-		} else {
-			options.setCluster(cluster);
 		}
 		pusher = new Pusher(key, options);
 	}

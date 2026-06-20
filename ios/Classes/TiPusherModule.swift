@@ -26,9 +26,12 @@ class TiPusherModule: TiModule {
   func initialize(arguments: Array<Any>?) {
     guard let arguments = arguments, let params = arguments[0] as? [String: Any] else { return }
     guard let key = params["key"] as? String else { return }
+    guard let host = params["host"] as? String else { return }
+    guard let port = params["port"] as? Int else { return }
     
     let options = PusherClientOptions(
-      host: .cluster("eu"),
+      host: .host(host),
+      port: port,
       useTLS: true
     )
     
