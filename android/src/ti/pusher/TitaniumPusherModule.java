@@ -52,6 +52,7 @@ public class TitaniumPusherModule extends KrollModule
 		if (proxyOptions != null) {
 			String authEndpoint = proxyOptions.getString("authEndpoint");
 			String accessToken = proxyOptions.getString("accessToken");
+			String cluster = proxyOptions.getString("cluster");
 			KrollDict headers = proxyOptions.getKrollDict("headers");
 
 			HashMap<String, String> nativeHeaders = new HashMap<>();
@@ -68,8 +69,11 @@ public class TitaniumPusherModule extends KrollModule
 			authorizer.setHeaders(nativeHeaders);
 			options.setChannelAuthorizer(authorizer);
 		}
-
-		options.setCluster("eu");
+		if(cluster=="") {
+			options.setCluster("eu");
+		} else {
+			options.setCluster(cluster);
+		}
 		pusher = new Pusher(key, options);
 	}
 
